@@ -4,7 +4,7 @@ package com.devsontap.graphqlexample.models;
  * Account model that is de-serialized from a graphQL response
  */
 
-public class Account {
+public class Account extends GQLModel {
 
     long id;
     String username;
@@ -23,5 +23,10 @@ public class Account {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    protected String getRawQuery() {
+        return "{account(id:\"%d\"){id,username}}";
     }
 }

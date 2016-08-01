@@ -28,8 +28,6 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements MainActivityListener {
 
-    private static final String TEST_QUERY = "{account(id:\"1\"){id,username}}}";
-
     private API mApi;
     private ActivityMainBinding mBinding;
 
@@ -73,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
 
     @Override
     public void onRequestWithRxJavaClick() {
-        mApi.queryWithObservable(TEST_QUERY)
+        mApi.queryWithObservable(new Account().formatQuery(1))
                 .subscribeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Account>() {
@@ -94,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
         new AsyncTask<Void, Void, Account>() {
             @Override
             protected Account doInBackground(Void... voids) {
-                Call<Account> accountCall = mApi.queryWithCall(TEST_QUERY);
+                Call<Account> accountCall = mApi.queryWithCall(new Account().formatQuery(1));
                 try {
                     Response<Account> response = accountCall.execute();
                     if (response.isSuccessful()) {
@@ -120,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
 
     @Override
     public void onRequestWithAsyncCallClick() {
-        Call<Account> accountCall = mApi.queryWithCall(TEST_QUERY);
+        Call<Account> accountCall = mApi.queryWithCall(new Account().formatQuery(1));
         accountCall.enqueue(new Callback<Account>() {
             @Override
             public void onResponse(Call<Account> call, Response<Account> response) {
